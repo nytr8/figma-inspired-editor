@@ -1,0 +1,24 @@
+  RECTANGLE-->
+  //  <div class="element rect demo-rect"
+  //                 style="top: 160px; left: 60px; width: 240px; height: 160px; background-color: var(--accent);">
+
+  //                 <!-- Selection Controls (Simulated for visuals) -->
+  //                 <!-- In a real app, this would likely be a sibling overlay, not child -->
+  //                 <div class="selection-box" style="width: 100%; height: 100%; top: 0; left: 0;">
+  //                     <!-- Resize Handles -->
+  //                     <div class="resize-handle handle-nw"></div>
+  //                     <div class="resize-handle handle-n"></div>
+  //                     <div class="resize-handle handle-ne"></div>
+  //                     <div class="resize-handle handle-e"></div>
+  //                     <div class="resize-handle handle-se"></div>
+  //                     <div class="resize-handle handle-s"></div>
+  //                     <div class="resize-handle handle-sw"></div>
+  //                     <div class="resize-handle handle-w"></div>
+
+  //                     <!-- Rotation Handle -->
+  //                     <div class="rotate-handle"></div>
+  //                 </div>
+  //             </div>
+
+
+  
