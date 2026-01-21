@@ -9,209 +9,256 @@ let selectMoveTool = document.querySelector('[data-tool="select"]');
 let rectTool = document.querySelector('[data-tool="rect"]');
 let textTool = document.querySelector('[data-tool="text"]');
 let imgTool = document.querySelector('[data-tool="image"]');
-//tools
+
+//whole art board
 let artBoard = document.querySelector("#artboard");
+//all tools btn
 let toolsBtn = document.querySelectorAll(".tools-dock .tool-btn ");
+//
+let layersDiv = document.querySelector(".layers .layers-list ");
+let layersItems = document.querySelectorAll(
+  ".layers .layers-list .layer-item ",
+);
+let container = "";
 
-// ===== CONSTANTS =====
-const DEFAULT_RECT_CONFIG = {
-  x: 60,
-  y: 160,
-  width: 240,
-  height: 160,
-  color: "var(--accent)",
-};
+//create items in layers
 
-const DEFAULT_TEXT_CONFIG = {
-  text: "welcome to dezineX",
-  x: 60,
-  y: 160,
-};
-
-const RESIZE_HANDLES = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
-
-// ===== HELPER FUNCTIONS =====
-
-/**
- * Generates a unique element ID
- */
-function generateElementId() {
-  return `el-${Date.now()}`;
-}
-
-/**
- * Creates default element styles
- */
-function createDefaultStyles(color = null) {
-  return {
-    rotation: 0,
-    color,
-    radius: 0,
-    stroke: 0,
+function createRectElement({ type, x, y, width, height, color }) {
+  //push data into array
+  let vals = {
+    id: `el-${Date.now()}`, // unique id
+    type: `${type}`,
+    x: x,
+    y: y,
+    width: width,
+    height: height,
+    styles: {
+      rotation: 0,
+      color: `${color}`,
+      radius: 0,
+      stroke: 0,
+    },
   };
-}
+  editorState.elements.push(vals);
+  // Main element
+  const element = document.createElement("div");
+  element.className = "element rect";
+  element.id = `${vals.id}`;
+  element.style.position = "absolute";
+  element.style.top = `${y}px`;
+  element.style.left = `${x}px`;
+  element.style.width = `${width}px`;
+  element.style.height = `${height}px`;
+  element.style.backgroundColor = color;
 
-/**
- * Deactivates all active tool buttons
- */
-function deactivateAllTools() {
-  toolsBtn.forEach((btn) => btn.classList.remove("active"));
-}
-
-/**
- * Creates a selection box with resize and rotate handles
- */
-function createSelectionBox() {
+  // Selection box
   const selectionBox = document.createElement("div");
   selectionBox.className = "selection-box";
-  Object.assign(selectionBox.style, {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100%",
-  });
+  selectionBox.id = "selection-box";
+  selectionBox.style.position = "absolute";
+  selectionBox.style.top = "0";
+  selectionBox.style.left = "0";
+  selectionBox.style.width = "100%";
+  selectionBox.style.height = "100%";
 
-  // Add resize handles
-  RESIZE_HANDLES.forEach((position) => {
+  // Resize handles
+  const handles = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
+
+  handles.forEach((pos) => {
     const handle = document.createElement("div");
-    handle.className = `resize-handle handle-${position}`;
+    handle.className = `resize-handle handle-${pos}`;
     selectionBox.appendChild(handle);
   });
 
-  // Add rotate handle
+  // Rotate handle
   const rotateHandle = document.createElement("div");
   rotateHandle.className = "rotate-handle";
   selectionBox.appendChild(rotateHandle);
 
-  return selectionBox;
-}
-
-// ===== ELEMENT CREATORS =====
-
-/**
- * Creates a rectangle element with selection controls
- * @param {Object} config - Rectangle configuration
- * @param {string} config.type - Element type
- * @param {number} config.x - X position
- * @param {number} config.y - Y position
- * @param {number} config.width - Width
- * @param {number} config.height - Height
- * @param {string} config.color - Background color
- */
-function createRectElement({ type, x, y, width, height, color }) {
-  const id = generateElementId();
-
-  // Store element data
-  editorState.elements.push({
-    id,
-    type,
-    x,
-    y,
-    width,
-    height,
-    styles: createDefaultStyles(color),
-  });
-
-  // Create DOM element
-  const element = document.createElement("div");
-  element.className = "element rect";
-  element.dataset.id = id;
-
-  Object.assign(element.style, {
-    position: "absolute",
-    top: `${y}px`,
-    left: `${x}px`,
-    width: `${width}px`,
-    height: `${height}px`,
-    backgroundColor: color,
-  });
-
-  // Add selection box
-  element.appendChild(createSelectionBox());
+  // Append selection box to element
+  element.appendChild(selectionBox);
 
   return element;
 }
+rectTool.addEventListener("click", (e) => {
+  const rect = createRectElement({
+    type: "rect",
+    x: 60,
+    y: 160,
+    width: 240,
+    height: 160,
+    color: "var(--accent)",
+  });
+  //   console.log(editorState.elements);
+  artBoard.appendChild(rect);
+  toolsBtn.forEach((elem) => {
+    // console.log(elem);
+    if (elem.classList.contains("active")) {
+      elem.classList.remove("active");
+    }
+  });
+  e.currentTarget.classList.add("active");
 
-/**
- * Creates a text element
- * @param {Object} config - Text configuration
- * @param {string} config.text - Text content
- * @param {number} config.x - X position
- * @param {number} config.y - Y position
- */
+  layersDiv.innerHTML = "";
+  container = "";
+  editorState.elements.forEach((elem, i) => {
+    container += `
+    <div id=${elem.id} class="layer-item ">
+      ${
+        elem.type === "rect"
+          ? '<i class="ri-shape-fill layer-icon"></i>'
+          : '<i class="ri-text layer-icon"></i>'
+      }
+      <span class="layer-name">${elem.type}-${i}</span>
+      <i class="ri-eye-line layer-icon" style="font-size: 12px; margin-left: auto;"></i>
+    </div>
+  `;
+  });
+
+  layersDiv.innerHTML = container;
+});
+
 function createTextElement({ text, x, y }) {
-  const id = generateElementId();
   const zIndex = editorState.zIndexCounter++;
-
-  // Store element data
-  editorState.elements.push({
-    id,
+  //push data into array
+  let val = {
+    id: `el-${Date.now()}`, // unique id
     type: "text",
-    x,
-    y,
+    x: x,
+    y: y,
     width: 100,
     height: 200,
     content: text,
     zIndex,
     styles: {
-      ...createDefaultStyles(),
+      rotation: 0,
+      color: null,
+      radius: 0,
+      stroke: 0,
       fontSize: "auto",
+      fontFamily: "Arial",
     },
-  });
+  };
+  editorState.elements.push(val);
 
-  // Create DOM element
   const element = document.createElement("div");
   element.className = "element text";
-  element.dataset.id = id;
-  element.textContent = text;
+  element.style.position = "absolute";
+  element.style.top = `${y}px`;
+  element.style.left = `${x}px`;
+  element.style.width = "auto";
+  element.style.height = "auto";
+  element.style.padding = "5px 10px";
 
-  Object.assign(element.style, {
-    position: "absolute",
-    top: `${y}px`,
-    left: `${x}px`,
-    width: "auto",
-    height: "auto",
-    zIndex,
+  // Text node
+  const p = document.createElement("p");
+  p.textContent = text;
+  p.style.margin = "0";
+  p.style.pointerEvents = "none"; // important for drag/select
+  element.appendChild(p);
+
+  // Selection box
+  const selectionBox = document.createElement("div");
+  selectionBox.className = "selection-box";
+  selectionBox.style.position = "absolute";
+  selectionBox.style.top = "0";
+  selectionBox.style.left = "0";
+  selectionBox.style.width = "100%";
+  selectionBox.style.height = "100%";
+
+  // Resize handles
+  const handles = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
+  handles.forEach((pos) => {
+    const handle = document.createElement("div");
+    handle.className = `resize-handle handle-${pos}`;
+    selectionBox.appendChild(handle);
   });
+
+  // Rotate handle
+  const rotateHandle = document.createElement("div");
+  rotateHandle.className = "rotate-handle";
+  selectionBox.appendChild(rotateHandle);
+
+  element.appendChild(selectionBox);
 
   return element;
 }
 
-// ===== EVENT HANDLERS =====
-
-/**
- * Handles rectangle tool click
- */
-function handleRectToolClick(e) {
-  const rect = createRectElement({
-    type: "rect",
-    ...DEFAULT_RECT_CONFIG,
+textTool.addEventListener("click", (e) => {
+  const textEl = createTextElement({
+    text: "welcome to dezineX",
+    x: 60,
+    y: 160,
   });
-
-  artBoard.appendChild(rect);
-
-  deactivateAllTools();
-  e.currentTarget.classList.add("active");
-
-  console.log("Elements:", editorState.elements);
-}
-
-/**
- * Handles text tool click
- */
-function handleTextToolClick(e) {
-  const textEl = createTextElement(DEFAULT_TEXT_CONFIG);
 
   artBoard.appendChild(textEl);
 
-  deactivateAllTools();
+  //   console.log(editorState.elements);
+  //   console.log(editorState.zIndexCounter);
+
+  toolsBtn.forEach((btn) => btn.classList.remove("active"));
   e.currentTarget.classList.add("active");
 
-  console.log("Elements:", editorState.elements);
-  console.log("Z-Index Counter:", editorState.zIndexCounter);
+  //adding elements to layers
+  layersDiv.innerHTML = "";
+  container = "";
+  editorState.elements.forEach((elem, i) => {
+    container += `
+    <div id=${elem.id} class="layer-item">
+      ${
+        elem.type === "rect"
+          ? '<i class="ri-shape-fill layer-icon"></i>'
+          : '<i class="ri-text layer-icon"></i>'
+      }
+      <span class="layer-name">${elem.type}-${i}</span>
+      <i class="ri-eye-line layer-icon" style="font-size: 12px; margin-left: auto;"></i>
+    </div>
+  `;
+    layersDiv.innerHTML = container;
+  });
+});
+
+function layersClick() {
+  layersDiv.addEventListener("click", (e) => {
+    const clickedItem = e.target.closest(".layer-item");
+    if (!clickedItem) return;
+
+    // Remove selection from all layers
+    layersDiv
+      .querySelectorAll(".layer-item.selected")
+      .forEach((item) => item.classList.remove("selected"));
+
+    // Remove selection from all rects
+    artBoard
+      .querySelectorAll(".selection-box.active")
+      .forEach((sb) => sb.classList.remove("active"));
+
+    // Select clicked layer
+    clickedItem.classList.add("selected");
+
+    // Select matching rect
+    const rect = artBoard.querySelector(
+      `.element.rect[id="${clickedItem.id}"]`,
+    );
+
+    rect?.querySelector(".selection-box")?.classList.add("active");
+  });
 }
 
-// ===== EVENT LISTENERS =====
-rectTool.addEventListener("click", handleRectToolClick);
-textTool.addEventListener("click", handleTextToolClick);
+function boxSelection() {
+  artBoard.addEventListener("click", (e) => {
+    const rect = e.target.closest(".rect");
+
+    //  Hide all selection boxes
+    document
+      .querySelectorAll(".selection-box.active")
+      .forEach((sb) => sb.classList.remove("active"));
+
+    // Show only the clicked rect's selection box
+    if (rect) {
+      rect.querySelector(".selection-box")?.classList.add("active");
+    }
+  });
+}
+boxSelection();
+layersClick();

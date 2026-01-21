@@ -448,6 +448,9 @@ input[type="color"] {
     color: white;
     white-space: pre-wrap;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     /* Prevent browser text selection inside editor */
 }
 
@@ -459,6 +462,14 @@ input[type="color"] {
     /* Let clicks pass through to element */
     box-sizing: border-box;
     /* We align this perfectly with the selected element */
+}
+
+.selection-box {
+    display: none;
+}
+
+.selection-box.active {
+    display: block;
 }
 
 .resize-handle {
