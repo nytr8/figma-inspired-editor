@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Design - Visual Editor</title>
+    <!-- Remix Icons for UI symbols -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="app-container">
+
+        <!-- Top Navigation / Toolbar -->
+        <header class="top-nav">
+            <div class="logo">
+                <i class="ri-layout-masonry-fill" style="color: var(--accent);"></i>
+                <span>DeZineX</span>
+            </div>
+
+            <div class="project-title">
+                <button class="btn primary"> Save</button>
+                <input type="text" placeholder="" class="title-text"></input>
+            </div>
+
+            <div class="actions">
+                <div style="width: 1px; height: 16px; background: var(--border-color); margin: 0 4px;"></div>
+                <button class="btn" title="Export Code"><i class="ri-code-s-slash-line"></i> Export</button>
+
+            </div>
+        </header>
+
+        <!-- Left Sidebar: Layers -->
+        <aside class="sidebar">
+            <div class="panel-header">
+                Layers
+            </div>
+            <div class="layers-list">
+                <!-- Mock Layers -->
+                <div class="layer-item selected">
+                    <i class="ri-shape-fill layer-icon"></i>
+                    <span class="layer-name">Red Rectangle</span>
+                    <i class="ri-eye-line layer-icon" style="font-size: 12px; margin-left: auto;"></i>
+                </div>
+                <div class="layer-item">
+                    <i class="ri-text layer-icon"></i>
+                    <span class="layer-name">Hero Title</span>
+                    <i class="ri-eye-line layer-icon" style="font-size: 12px; margin-left: auto;"></i>
+                </div>
+                <div class="layer-item">
+                    <i class="ri-image-fill layer-icon"></i>
+                    <span class="layer-name">Background Image</span>
+                    <i class="ri-lock-line layer-icon" style="font-size: 12px; margin-left: auto;"></i>
+                </div>
+            </div>
+            <div id="sort-layers">
+                <div class="sort-left">
+                    <p><i class="ri-arrow-up-line"></i></i><span style="display: inline-block;">LAYER UP</span> </p>
+                </div>
+                <div class="sort-right">
+                    <p><i class="ri-arrow-up-line"></i></i><span style="display: inline-block;">LAYER DOWN</span> </p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Workspace -->
+        <main class="canvas-container">
+            <!-- Simulated Artboard -->
+            <div id="artboard" class="artboard">
+
+                <!-- Mock Elements -->
+
+                <!-- 1. Text Element -->
+                <div class="element text demo-text" style="top: 80px; left: 60px; width: auto; height: auto;">
+                    Welcome to DOM Design
+                </div>
+                <!-- 2. Rectangle Element (Selected) -->
+                <div class="element rect demo-rect"
+                    style="top: 160px; left: 60px; width: 240px; height: 160px; background-color: var(--accent);">
+
+                    <!-- Selection Controls (Simulated for visuals) -->
+                    <!-- In a real app, this would likely be a sibling overlay, not child -->
+                    <div class="selection-box" style="width: 100%; height: 100%; top: 0; left: 0;">
+                        <!-- Resize Handles -->
+                        <div class="resize-handle handle-nw"></div>
+                        <div class="resize-handle handle-n"></div>
+                        <div class="resize-handle handle-ne"></div>
+                        <div class="resize-handle handle-e"></div>
+                        <div class="resize-handle handle-se"></div>
+                        <div class="resize-handle handle-s"></div>
+                        <div class="resize-handle handle-sw"></div>
+                        <div class="resize-handle handle-w"></div>
+
+                        <!-- Rotation Handle -->
+                        <div class="rotate-handle"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Floating Tool Dock -->
+            <div class="tools-dock">
+                <button class="tool-btn active" data-tool="select" title="Move (V)">
+                    <i class="ri-cursor-fill"></i>
+                </button>
+                <div class="dock-divider"></div>
+                <button class="tool-btn" data-tool="rect" title="Rectangle (R)">
+                    <i class="ri-shape-line"></i>
+                </button>
+                <button class="tool-btn" data-tool="text" title="Text (T)">
+                    <i class="ri-text"></i>
+                </button>
+                <button class="tool-btn" data-tool="image" title="Image (I)">
+                    <i class="ri-image-line"></i>
+                </button>
+                <div class="dock-divider"></div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Properties -->
+        <aside class="sidebar right">
+            <div class="panel-header">
+                Design
+            </div>
+
+            <div class="properties-content">
+
+                <!-- Alignment Tools -->
+                <div class="prop-row" style="justify-content: space-between; padding: 0 4px;">
+                    <button class="btn icon-only" title="Align Left"><i class="ri-align-left"></i></button>
+                    <button class="btn icon-only" title="Align Center"><i class="ri-align-center"></i></button>
+                    <button class="btn icon-only" title="Align Right"><i class="ri-align-right"></i></button>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+
+                <!-- Position & Size -->
+                <div class="prop-section">
+                    <div class="prop-row">
+                        <div class="input-group">
+                            <span class="label">X</span>
+                            <input type="text" class="input-field" value="60">
+                        </div>
+                        <div class="input-group">
+                            <span class="label">Y</span>
+                            <input type="text" class="input-field" value="160">
+                        </div>
+                    </div>
+                    <div class="prop-row">
+                        <div class="input-group">
+                            <span class="label">W</span>
+                            <input type="text" class="input-field" value="240">
+                        </div>
+                        <div class="input-group">
+                            <span class="label">H</span>
+                            <input type="text" class="input-field" value="160">
+                        </div>
+                    </div>
+                    <div class="prop-row">
+                        <div class="input-group">
+                            <span class="label">Rotation</span>
+                            <div style="position: relative;">
+                                <input type="text" class="input-field" value="0°" style="padding-left: 24px;">
+                                <i class="ri-refresh-line"
+                                    style="position: absolute; left: 6px; top: 6px; font-size: 12px; color: var(--text-muted);"></i>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="label">Radius</span>
+                            <div style="position: relative;">
+                                <input type="text" class="input-field" value="0" style="padding-left: 24px;">
+                                <i class="ri-corner-radius-line"
+                                    style="position: absolute; left: 6px; top: 6px; font-size: 12px; color: var(--text-muted);"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+
+                <!-- Fill -->
+                <div class="prop-section">
+                    <span class="label" style="font-weight: 600; color: var(--text-secondary);">Fill</span>
+                    <div class="prop-row" style="align-items: center;">
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" style="background-color: var(--accent);"></div>
+                            <input type="text" class="input-field" value="#0D99FF"
+                                style="border: none; background: transparent; padding: 0 4px;">
+                        </div>
+
+                    </div>
+                </div>
+                <!-- text fill -->
+                <div class="prop-section textcolor-sec">
+                    <span class="label" style="font-weight: 600; color: var(--text-secondary);">TEXT COLOR</span>
+                    <div class="prop-row" style="align-items: center;">
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" style="background-color: var(--danger);"></div>
+                            <input type="text" class="input-field" value="#0D99FF"
+                                style="border: none; background: transparent; padding: 0 4px;">
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+
+                <!-- Stroke -->
+                <div class="prop-section Stroke">
+                    <div style="display: flex;gap: 10px; justify-content: space-between; align-items: center;">
+                        <span class="label" style="font-weight: 600; color: var(--text-secondary);">Stroke</span>
+                        <div class="color-input-wrapper">
+                            <input type="text" class="input-field" value="10"
+                                style="border: none; background: transparent; padding: 0 4px;">
+                        </div>
+                        <span class="label" style="font-weight: 600; color: var(--text-secondary);">PX</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
