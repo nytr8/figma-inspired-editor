@@ -544,6 +544,7 @@ input[type="color"] {
     left: calc(50% - 5px);
     cursor: grab !important;
     z-index: 10;
+    pointer-events: auto;
 
 }
 
