@@ -342,13 +342,35 @@ body {
     height: 20px;
     border-radius: 3px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    /* Ensure it contains the absolute input */
+    overflow: hidden;
+    /* Clip the square input corners */
+}
+
+.color-preview input[type="color"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    /* Make it larger to hide the browser default styling */
+    height: 200%;
+    transform: translate(-50%, -50%);
+    /* Center it to ensure clickability */
+    opacity: 0;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border: none;
 }
 
 input[type="color"] {
+    /* Keep this for other potential usages or reset */
     opacity: 0;
-    position: absolute;
     width: 0;
     height: 0;
+    border: none;
+    padding: 0;
 }
 
 /* --- Canvas Area --- */
@@ -577,4 +599,112 @@ input[type="color"] {
     color: #fff;
     font-size: 24px;
     font-weight: bold;
+}
+
+/* --- Element Styling --- */
+.element {
+    position: absolute;
+    cursor: move;
+}
+
+.element.rect {
+    /* Rect-specific styles if needed */
+}
+
+.element.text {
+    /* Text-specific styles */
+    white-space: pre-wrap;
+}
+
+/* --- Selection Box --- */
+.selection-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    pointer-events: none;
+    display: none;
+    /* Hidden by default */
+}
+
+.selection-box.active {
+    display: block;
+    /* Show when active */
+    border: 2px solid var(--accent);
+    pointer-events: auto;
+}
+
+/* Resize Handles */
+.resize-handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border: 1px solid var(--accent);
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.handle-nw {
+    top: -4px;
+    left: -4px;
+    cursor: nwse-resize;
+}
+
+.handle-n {
+    top: -4px;
+    left: calc(50% - 4px);
+    cursor: ns-resize;
+}
+
+.handle-ne {
+    top: -4px;
+    right: -4px;
+    cursor: nesw-resize;
+}
+
+.handle-e {
+    top: calc(50% - 4px);
+    right: -4px;
+    cursor: ew-resize;
+}
+
+.handle-se {
+    bottom: -4px;
+    right: -4px;
+    cursor: nwse-resize;
+}
+
+.handle-s {
+    bottom: -4px;
+    left: calc(50% - 4px);
+    cursor: ns-resize;
+}
+
+.handle-sw {
+    bottom: -4px;
+    left: -4px;
+    cursor: nesw-resize;
+}
+
+.handle-w {
+    top: calc(50% - 4px);
+    left: -4px;
+    cursor: ew-resize;
+}
+
+/* Text Editor */
+.text-editor {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    padding: 2px 5px;
 }
