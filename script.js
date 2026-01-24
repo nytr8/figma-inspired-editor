@@ -1,10 +1,8 @@
-// ============================================
-// EDITOR STATE
-// ============================================
+
 const editorState = {
-  elements: [], // All rectangles & text elements
-  selectedId: null, // Currently selected element ID
-  zIndexCounter: 1, // Counter for z-index management
+  elements: [],
+  selectedId: null,
+  zIndexCounter: 1,
 };
 
 // ============================================
@@ -677,10 +675,14 @@ function enableTextEditing() {
 /**
  * Saves the project to localStorage
  */
-function saveProject() {
+function saveToLocalStorage() {
   const json = JSON.stringify(editorState);
   localStorage.setItem("dezinex-state", json);
   console.log("Project Saved!");
+}
+
+function saveProject() {
+  saveToLocalStorage();
   alert("Project Saved Successfully!");
 }
 
@@ -1064,6 +1066,9 @@ document.addEventListener("keydown", (e) => {
   // Update UI
   renderLayersPanel();
   if (window.updatePropertiesPanel) window.updatePropertiesPanel(null);
+
+  // Save changes to localStorage
+  saveToLocalStorage();
 
   console.log("Element deleted");
 });
